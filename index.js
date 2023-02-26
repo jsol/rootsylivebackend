@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var WebSocketServer = require('websocket').server;
 var http = require('http');
+const { v4: uuidv4 } = require('uuid');
 
 const connections = []
 
@@ -54,9 +55,32 @@ wsServer.on('request', function (request) {
     connection.on('message', function (message) {
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
-            connections.forEach(c => {
-                c.sendUTF(message.utf8Data)
-            });
+
+            const obj = JSON.parse(message.utf8Data)
+            if (obj.op == 'set') {
+                for (const [key, value] of Object.entries(obj.data)) {
+
+                    obj.data[key].forEach(e => {
+                        if (e.id == '') {
+                            e.id = uuidv4()
+                        }
+                        const found = base.data[key].find(c => c.id == e.id)
+                        if (found) {
+                            for (const [p, v] of Object.entries(e)) {
+                                found[p] = v
+                            }
+                            console.log('updated', e)
+                        } else {
+                            base.data[key].push(e)
+                            console.log("added", e)
+                        }
+                    })
+                }
+                const out = JSON.stringify(obj)
+                connections.forEach(c => {
+                    c.sendUTF(out)
+                });
+            }
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
