@@ -3,12 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": "index.js",
   "scripts": {
+    "build": "pkg --target host --output rootsylivebackend .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "google-auth-library": "^8.7.0",
+    "mysql": "^2.18.1",
+    "pkg": "^5.8.0",
     "uuid": "^9.0.0",
     "websocket": "^1.0.34"
   }
