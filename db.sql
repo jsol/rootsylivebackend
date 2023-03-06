@@ -47,10 +47,8 @@ CREATE TABLE IF NOT EXISTS rootsylive.templates (
     id varchar(250) NOT NULL primary key,
     changed DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     category varchar(255) NOT NULL,
-    template jsonNew Promoter
+    template json
 );
-
-INSERT INTO rootsylive.users (email, valid) VALUES ("jens@rootsy.nu", 1);
 
 INSERT INTO rootsylive.options (category, name) VALUES
 ("hospitality", "Band rider" ),
