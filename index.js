@@ -194,8 +194,8 @@ const base = {
 
 var server = http.createServer(app);
 
-server.listen(20080, function () {
-    console.log((new Date()) + ' Server is listening on port 8080');
+server.listen(process.env.PORT || 20080, function () {
+    console.log((new Date()) + ' Server is listening on port ', process.env.PORT || 20080);
 });
 
 wsServer = new WebSocketServer({
@@ -216,12 +216,12 @@ const users = ['jens@rootsy.nu']
 
 function userOk(user) {
     return new Promise((resolve, reject) => {
-        pool.query("SELECT valid from users WHERE id = ?", [user.id], (error, results, fields) => {
+        pool.query("SELECT valid from users WHERE id = ?", [user.sub], (error, results, fields) => {
             if (error) {
                 return reject(error);
             }
             if (results.length == 0) {
-                pool.query("INSERT INTO users (email) VALUES (?)", [user.email], () => { })
+                pool.query("INSERT INTO users (id, email) VALUES (?, ?)", [user.sub, user.email], (err) => { if (err) console.log(err)})
                 return resolve(false)
             }
             return resolve(results[0].valid == 1)
@@ -251,6 +251,7 @@ async function verifyAuth(conn, token) {
 
     if (await userOk(payload)) {
         const data = await getDataFromDb()
+        conn.authToken = token
         conn.sendUTF(JSON.stringify(data))
     }
 }

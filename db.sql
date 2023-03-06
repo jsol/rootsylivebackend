@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS rootsylive  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS rootsylive.users (
-    id bigint NOT NULL PRIMARY KEY,
+    id varchar(255) NOT NULL,
     changed DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     email varchar(255) NOT NULL,
     valid tinyint not null default 0
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS rootsylive.templates (
     template json
 );
 
-INSERT INTO rootsylive.options (category, name) VALUES
+    INSERT INTO rootsylive.options (category, name) VALUES
 ("hospitality", "Band rider" ),
 ("hospitality", "Inhouse" ),
 ("hospitality", "Rootsy Rider" ),
